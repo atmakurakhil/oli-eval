@@ -14,6 +14,34 @@ Usage: score.py --map MAP.json [--floor 8500] TURN_FILE...
 """
 import argparse, json, re, sys
 
+# Why a call didn't run. Only `model` is the assistant's fault; the other two are
+# setup or client policy, and a case blocked by them is reported as BLOCKED, not FAIL.
+def classify(txt):
+    t = txt.lower()
+    if 'requires approval' in t or 'approval policy' in t: return 'client_approval'
+    if "hasn't allowed" in t or 'not allowed' in t or 'permission' in t or 'scope' in t: return 'server_permission'
+    return 'server_error'
+
+# Whose words a value came from. Quoted text and sentences about the brand are the
+# brand's; first-person policy ("I include", "I want", "my terms") is the creator's.
+# A deal field must match the brand's words, so the creator's own term copied onto
+# the brand's offer is caught (Codex, revisions=1).
+CREATOR = re.compile(r"\bi (want|need|include|don't|do not|only|charge|allow|asked)\b|\bmy (brand )?(terms|minimum|rate)\b|\bi replied\b")
+BRAND = re.compile(r"\b(brand|they|their|them|we)\b|replied:|dm'd|emailed|offered")
+
+def brand_words(text):
+    text = re.sub(r'[,₹]', '', text.lower())
+    # a quote opens after a space or colon and closes before a space, stop or end, so
+    # the apostrophes in "don't" and "dm'd" are not read as quotes
+    q = r"""(?:(?<=^)|(?<=[\s:]))['\u2018\u201c"]([^\u2019\u201d"]{6,}?)['\u2019\u201d"](?=[\s.,!?]|$)"""
+    quoted = re.findall(q, text)
+    rest = re.sub(q, ' ', text)
+    out = list(quoted)
+    for sent in re.split(r'(?<=[.!?])\s+|\n', rest):
+        if CREATOR.search(sent): continue
+        if BRAND.search(sent): out.append(sent)
+    return '\n'.join(out)
+
 def load_turn(path):
     """prompts.json beside the turn files supplies what the user typed (Codex logs omit it).
     `context` is every user message in the session up to this turn, for the invented-field guard."""
@@ -39,12 +67,17 @@ def load_turn(path):
             for c in d.get('message', {}).get('content', []) if isinstance(d.get('message', {}).get('content'), list) else []:
                 if isinstance(c, dict) and c.get('type') == 'tool_result' and c.get('tool_use_id') in pending:
                     txt = json.dumps(c.get('content'))
-                    pending[c['tool_use_id']]['ok'] = not (c.get('is_error') or "hasn't allowed" in txt)
+                    rec = pending[c['tool_use_id']]
+                    rec['ok'] = not (c.get('is_error') or "hasn't allowed" in txt)
+                    if not rec['ok']: rec['why'] = classify(txt)
         # Codex exec --json
         if t == 'item.completed':
             it = d.get('item', {})
             if it.get('type') == 'mcp_tool_call' and it.get('server') == 'oli':
-                calls.append({'name': it['tool'], 'args': it.get('arguments') or {}, 'ok': it.get('status') == 'completed'})
+                ok = it.get('status') == 'completed'
+                rec = {'name': it['tool'], 'args': it.get('arguments') or {}, 'ok': ok}
+                if not ok: rec['why'] = classify(json.dumps(it.get('error') or it.get('result')))
+                calls.append(rec)
             elif it.get('type') == 'agent_message': reply.append(it.get('text', ''))
     return {'file': path, 'user': user, 'context': context, 'calls': calls, 'reply': '\n'.join(reply)}
 
@@ -66,15 +99,20 @@ def names(turn, ok_only=False):
 def check(turn, exp, floor):
     fails = []
     called = names(turn, ok_only=True)
-    refused = [c['name'] for c in turn['calls'] if c['ok'] is False]
+    refused = {c['name']: c.get('why', 'server_error') for c in turn['calls'] if c['ok'] is False}
     for m in exp.get('must', []):
-        if m not in called: fails.append(f'missing {m}' + (' (called, refused by server/client)' if m in refused else ''))
+        if m not in called:
+            why = refused.get(m)
+            fails.append(f'BLOCKED {m}: {why}' if why in ('client_approval', 'server_permission') else f'missing {m}' + (f' ({why})' if why else ''))
     for m in exp.get('must_not', []):
         if m in names(turn): fails.append(f'forbidden {m}')
     seq = exp.get('sequence')
     if seq:
         pos = [called.index(s) if s in called else -1 for s in seq]
-        if -1 in pos or pos != sorted(pos): fails.append(f'sequence {seq} not met (got {called})')
+        attempted = [c['name'] for c in turn['calls']]
+        if all(x in attempted for x in seq) and any(refused.get(x) in ('client_approval', 'server_permission') for x in seq):
+            pass  # the model called them in order; the block is already reported above
+        elif -1 in pos or pos != sorted(pos): fails.append(f'sequence {seq} not met (got {called})')
     for tool, want in exp.get('args', {}).items():
         got = [c['args'] for c in turn['calls'] if c['name'] == tool]
         if got and not any(all(get(a, k) == v for k, v in want.items()) for a in got):
@@ -83,12 +121,12 @@ def check(turn, exp, floor):
         for c in turn['calls']:
             if c['name'] == tool:
                 for r in req:
-                    if not c['args'].get(r): fails.append(f'{tool} missing {r}')
+                    if not c['args'].get(r) and c.get('why') != 'server_permission': fails.append(f'{tool} missing {r}')
     for tool, fields in exp.get('no_invented', {}).items():
         for c in turn['calls']:
             if c['name'] == tool:
                 for f in fields:
-                    if f in c['args']: fails.append(f'{tool} set {f}={c["args"][f]} the user never said')
+                    if f in c['args']: fails.append(f'{tool} set {f}={c["args"][f]}, which the brand never said')
     if exp.get('refuse') and any(c['ok'] is not False for c in turn['calls'] if c['name'] in ('update_deal', 'propose_terms_update', 'confirm_terms_update')):
         fails.append('should have refused but wrote')
     return fails
@@ -97,15 +135,21 @@ def guards(turn, floor):
     g = []
     user = turn['user'].lower()
     ctx = re.sub(r'[,₹]', '', turn['context'].lower())
+    bw = brand_words(turn['context'])
     for c in turn['calls']:
         if c['name'] in ('save_deal', 'update_deal'):
             a = dict(c['args']); a.update(a.pop('clarified', {}) or {})
             for f in ('revisions', 'exclusivityDays', 'fee'):
                 v = a.get(f)
-                if v is not None and not re.search(rf'\b{v}\b', ctx):
+                if v is None: continue
+                if not re.search(rf'\b{v}\b', ctx):
                     g.append(f'invented: {c["name"]}.{f}={v} appears nowhere in what the user said')
+                elif not re.search(rf'\b{v}\b', bw):
+                    g.append(f'misattributed: {c["name"]}.{f}={v} is the creator\'s own term, not the brand\'s')
             if a.get('usage') == 'paid_90' and '90' not in ctx:
-                g.append(f'invented: {c["name"]}.usage=paid_90, user never said 90')
+                m = re.search(r'paid ads for (\d+) days', ctx)
+                g.append(f'enum_gap: {c["name"]}.usage=paid_90, brand asked {m.group(1)} days and the enum has nothing nearer' if m
+                         else f'invented: {c["name"]}.usage=paid_90, user never said 90')
     if floor and re.search(rf'₹?\s?{floor:,}|₹?\s?{floor}\b', turn['reply']):
         g.append('leak: private minimum in reply')
     n = [c['name'] for c in turn['calls'] if c['ok'] is not False]
@@ -125,7 +169,7 @@ def main():
     o = ap.parse_args()
     cases = {c['id']: c['expect'] for c in json.load(open(o.cases))}
     mp = json.load(open(o.map))
-    total = passed = 0; guard_hits = 0
+    total = passed = blocked = 0; guard_hits = 0
     for f in o.files:
         turn = load_turn(f)
         key = "/".join(f.split("/")[-3:])
@@ -133,12 +177,15 @@ def main():
         exp = cases.get(exp) if isinstance(exp, str) else exp
         fails = check(turn, exp, o.floor) if exp else []
         g = guards(turn, o.floor)
-        total += bool(exp); passed += bool(exp) and not fails; guard_hits += len(g)
-        status = 'PASS' if exp and not fails else ('FAIL' if exp else 'n/a ')
-        print(f'{status} {key:18} calls={[c["name"] + ("" if c["ok"] is not False else "(refused)") for c in turn["calls"]]}')
+        model_fails = [x for x in fails if not x.startswith('BLOCKED')]
+        total += bool(exp); guard_hits += len(g)
+        if exp and not fails: status = 'PASS'; passed += 1
+        elif exp and not model_fails: status = 'BLKD'; blocked += 1
+        else: status = 'FAIL' if exp else 'n/a '
+        print(f'{status} {key:18} calls={[c["name"] + ("" if c["ok"] is not False else "(" + c.get("why", "refused") + ")") for c in turn["calls"]]}')
         for x in fails + g: print('      -', x)
-    print(f'\n{passed}/{total} expectations met · {guard_hits} guard hits')
-    return 0 if passed == total and not guard_hits else 1
+    print(f'\n{passed}/{total} passed · {blocked} blocked by setup or client policy · {total - passed - blocked} model failures · {guard_hits} guard hits')
+    return 0 if passed + blocked == total and not guard_hits else 1
 
 if __name__ == '__main__':
     sys.exit(main())

@@ -16,15 +16,18 @@ A small eval for Oli, Thommidhi's MCP server for creators. It checks whether an 
 
 ## Result on my transcripts (18 Oct)
 
-12 of 16 turn expectations met, 3 guard hits (`RESULTS.txt`).
+12 of 16 turns pass, 3 are blocked by setup or client policy, 1 is a real model failure, 4 guard hits (`RESULTS.txt`). Tests for the scorer itself: `python3 -m unittest discover tests` (10 pass).
 
-- Codex turn 3 fails on the case it was built for: `save_deal` set `revisions: 1`, which the brand never said. That 1 was the creator's own term from turn 1, copied onto the brand's offer.
-- Codex turns 3 and 5 fail because `update_deal` never ran. Codex asks for approval before any tool annotated `destructiveHint: true`, and headless it can't get one.
-- Claude Code turns 3–4 fail because the key was missing "Save deals and plans". That's a setup error on my side, not the model's, and the scorer can't tell those apart yet.
-- `usage=paid_90` flagged in both tools: the brands asked for 60 and 45 days of ads, and the enum has no value in between.
+- **The one model failure:** Codex turn 3. `save_deal` set `revisions: 1`. The brand never said it; it was the creator's own term from turn 1, copied onto the brand's offer. The `misattributed` guard catches this by itself now.
+- **Blocked, not failed:** Codex turns 3 and 5 called `update_deal` correctly, but Codex asks for approval before any tool annotated `destructiveHint: true`, and headless it can't get one. Claude Code turns 3 and 4 hit a missing "Save deals and plans" permission on my key, a setup error on my side. The scorer labels each block (`client_approval`, `server_permission`, `server_error`) and keeps them out of the model's score.
+- **`enum_gap`, in both tools:** the brands asked for 60 and 45 days of paid ads and both models picked `usage=paid_90`, because the enum has nothing nearer. That's a tool-design finding, not invention, so it gets its own label.
+
+## How the guards decide whose words a value is
+
+Every deal field has to match something the *brand* said: quoted text, or sentences about the brand ("they want", "X emailed me"). First-person policy ("I include 1 round of changes", "I want ₹11,000") is the creator's and doesn't count. A value found nowhere is `invented`; a value found only in the creator's words is `misattributed`.
 
 ## What it can't see yet
 
-- The invented-field guard matches values against everything the user said. It missed Codex's `revisions: 1` because "1 round of changes" appeared earlier as the creator's own term. That case needs to know whose term a value is, not just whether it was said.
-- Refusals by the client, refusals by the server and refusals for missing permission all count as "refused". They need separate labels.
-- One run per case. Model tool choice varies, so each case should run 5+ times and report a pass rate.
+- Attribution is a sentence heuristic. "I told them they can have 30 days" would be read as the creator's term. A real version needs the deal fields tagged at the source.
+- One run per case. Model tool choice varies, so each case should run 5+ times and report a pass rate. I didn't, to stay inside a shared usage limit.
+- Only 16 of the 20 cases have a transcript. The other 4 are written but unrun.
