@@ -2,3 +2,4 @@ cc
 cx
 rt
 *.err
+__pycache__/
