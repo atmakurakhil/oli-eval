@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a152ad-26b6-7fa3-9414-6b99dcbf1700"}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"item_0","type":"mcp_tool_call","server":"oli","tool":"confirm_terms_update","arguments":{"change_id":"apc_lpcl6izdoh"},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_0","type":"mcp_tool_call","server":"oli","tool":"confirm_terms_update","arguments":{"change_id":"apc_lpcl6izdoh"},"result":null,"error":{"message":"MCP tool call requires approval, but approval policy is never"},"status":"failed"}}
+{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"I couldn’t save it: Oli’s confirmation tool requires an approval the current tool policy doesn’t allow. Your notice is still **14 days**; the 21-day preview wasn’t saved."}}
+{"type":"turn.completed","usage":{"input_tokens":154294,"cached_input_tokens":128256,"cache_write_input_tokens":0,"output_tokens":490,"reasoning_output_tokens":153}}

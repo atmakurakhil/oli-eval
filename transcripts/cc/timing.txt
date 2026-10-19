@@ -1,0 +1,6 @@
+turn1 34.7s
+turn2 36.8s
+turn3 40.4s
+turn4 34.3s
+turn5 45.7s
+turn6 40.0s

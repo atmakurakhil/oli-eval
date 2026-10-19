@@ -1,0 +1,6 @@
+turn1 c12 37.8s sid=01a152b0-cd93-75c0-9bdc-9d41f2d944bf
+turn2 c14 39.3s sid=01a152b0-cd93-75c0-9bdc-9d41f2d944bf
+turn3 c15 36.7s sid=01a152b0-cd93-75c0-9bdc-9d41f2d944bf
+turn4 c16 25.7s sid=01a152b0-cd93-75c0-9bdc-9d41f2d944bf
+turn5 c17 43.8s sid=01a152b0-cd93-75c0-9bdc-9d41f2d944bf
+turn6 c19 36.8s sid=01a152b0-cd93-75c0-9bdc-9d41f2d944bf

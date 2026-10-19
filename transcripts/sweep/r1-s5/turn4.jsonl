@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a152b1-12c2-7550-b77f-2d216730d6d5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"It looks like a high fee, but your saved Oli terms explicitly say you won’t promote betting or gambling. I’d treat this offer as outside your stated boundaries. It also doesn’t become agreed just because the brand made an offer; both sides would need to confirm terms."}}
+{"type":"turn.completed","usage":{"input_tokens":245911,"cached_input_tokens":181376,"cache_write_input_tokens":0,"output_tokens":882,"reasoning_output_tokens":186}}

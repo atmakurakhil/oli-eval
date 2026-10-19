@@ -1,0 +1,22 @@
+{
+ "sweep/r2-s1/turn1.jsonl": "c01",
+ "sweep/r2-s1/turn2.jsonl": "c02",
+ "sweep/r2-s1/turn3.jsonl": "c08",
+ "sweep/r2-s1/turn4.jsonl": "c09",
+ "sweep/r2-s2/turn1.jsonl": "c03",
+ "sweep/r2-s2/turn2.jsonl": "c04",
+ "sweep/r2-s2/turn3.jsonl": "c05",
+ "sweep/r2-s3/turn1.jsonl": "c06",
+ "sweep/r2-s3/turn2.jsonl": "c07",
+ "sweep/r2-s4/turn1.jsonl": "c10",
+ "sweep/r2-s4/turn2.jsonl": "c11",
+ "sweep/r2-s4/turn3.jsonl": "c18",
+ "sweep/r2-s4/turn4.jsonl": "c13",
+ "sweep/r2-s4/turn5.jsonl": "c20",
+ "sweep/r2-s5/turn1.jsonl": "c12",
+ "sweep/r2-s5/turn2.jsonl": "c14",
+ "sweep/r2-s5/turn3.jsonl": "c15",
+ "sweep/r2-s5/turn4.jsonl": "c16",
+ "sweep/r2-s5/turn5.jsonl": "c17",
+ "sweep/r2-s5/turn6.jsonl": "c19"
+}

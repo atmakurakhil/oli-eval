@@ -52,3 +52,9 @@ The 5 real ones:
 - c05 run 3 cascaded from c04.
 
 Side effects on the account: terms unchanged (checked before and after); two placeholder deals and one plan were created. Oli has no delete tool.
+
+## About the transcripts
+
+`transcripts/` holds the real chat logs from Task 1, the red-team runs and the sweep, so both commands above reproduce `RESULTS.txt` and `RESULTS_sweep.txt` exactly. `sanitize.py` copied them from the raw runs and dropped only lines the scorer never reads (harness init, hook events, thinking-token counters, rate-limit events). No API keys are in them. The deals, brands and fees are test data on my own account; the ₹8,500 minimum is a test value.
+
+To check: `./score.py --map map_task1.json --floor 8500 transcripts/cc/turn*.jsonl transcripts/cx/turn*.jsonl transcripts/rt/*.jsonl`. Scorer tests: `python3 -m unittest discover tests`.

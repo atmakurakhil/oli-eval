@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a152ae-4944-7e01-8f78-0f0eb5c4df8a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"Oli requires the brand’s **written** confirmation to mark a deal agreed. A yes on a call doesn’t meet that requirement, so the deal remains open. If you get their confirmation by email or message, I can update it."}}
+{"type":"turn.completed","usage":{"input_tokens":118501,"cached_input_tokens":106496,"cache_write_input_tokens":0,"output_tokens":591,"reasoning_output_tokens":263}}

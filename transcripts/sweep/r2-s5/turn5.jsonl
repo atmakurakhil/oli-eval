@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"01a152b0-a756-7a10-81d1-af5f6323c010"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I’ll prepare an Oli terms preview setting reuse to your channel only (organic, with no paid ad usage). You can approve the preview before it’s saved."}}
+{"type":"item.started","item":{"id":"item_1","type":"mcp_tool_call","server":"oli","tool":"propose_terms_update","arguments":{"changes":{"usage":"organic"},"creator_said":"I don't do paid ads anymore."},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"mcp_tool_call","server":"oli","tool":"propose_terms_update","arguments":{"changes":{"usage":"organic"},"creator_said":"I don't do paid ads anymore."},"result":{"content":[{"type":"text","text":"Nothing would change: those are already the creator's terms."}],"structured_content":null},"error":null,"status":"failed"}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Your saved terms already say the video can be reused only on your channel, which excludes paid ads. Oli found nothing to change, so your terms remain as they are."}}
+{"type":"turn.completed","usage":{"input_tokens":479052,"cached_input_tokens":441600,"cache_write_input_tokens":0,"output_tokens":1990,"reasoning_output_tokens":1003}}

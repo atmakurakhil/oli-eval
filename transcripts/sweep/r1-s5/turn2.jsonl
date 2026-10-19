@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a152b1-12c2-7550-b77f-2d216730d6d5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I can’t choose a minimum for you: Oli requires that fee to come from you and says not to guess. Tell me the amount in rupees you want as your minimum, and I can prepare it for you to review and save."}}
+{"type":"turn.completed","usage":{"input_tokens":123362,"cached_input_tokens":79232,"cache_write_input_tokens":0,"output_tokens":414,"reasoning_output_tokens":108}}

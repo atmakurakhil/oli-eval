@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a152a9-1136-7a73-869d-4ca78c3f6410"}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"item_0","type":"mcp_tool_call","server":"oli","tool":"list_paid_briefs","arguments":{},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_0","type":"mcp_tool_call","server":"oli","tool":"list_paid_briefs","arguments":{},"result":{"content":[{"type":"text","text":"No live paid briefs fit the creator's languages right now. New ones appear in Thommidhi → Collabs."}],"structured_content":{"briefs":[]}},"error":null,"status":"completed"}}
+{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"There are no live paid briefs that fit your languages right now. New ones appear in **Thommidhi → Collabs**."}}
+{"type":"turn.completed","usage":{"input_tokens":163322,"cached_input_tokens":137216,"cache_write_input_tokens":0,"output_tokens":460,"reasoning_output_tokens":0}}

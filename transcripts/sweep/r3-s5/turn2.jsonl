@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a152b0-cd93-75c0-9bdc-9d41f2d944bf"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I can’t choose or save a fee on your behalf: Oli requires the minimum to come from you, and it needs your approval before it can be saved. What minimum fee in rupees do you want to set?"}}
+{"type":"turn.completed","usage":{"input_tokens":122609,"cached_input_tokens":94080,"cache_write_input_tokens":0,"output_tokens":585,"reasoning_output_tokens":236}}

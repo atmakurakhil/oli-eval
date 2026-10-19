@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a152aa-e671-7391-9622-004c4a03f666"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I can save those dates, but I still need the brand and product to create the ₹6,000 deal and link the plan to it. Which brand and product is it?"}}
+{"type":"turn.completed","usage":{"input_tokens":210396,"cached_input_tokens":194944,"cache_write_input_tokens":0,"output_tokens":1376,"reasoning_output_tokens":861}}

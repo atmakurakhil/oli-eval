@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a152b1-12c2-7550-b77f-2d216730d6d5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"The deliverable fits your terms, but the brand reposting it doesn’t: your saved reuse term is **“Only on my channel.”** The ₹9,000 fee isn’t compared here because Oli keeps your minimum private. You could ask them to drop reposting and keep the clip only on your channel, then decide whether the fee works for you."}}
+{"type":"turn.completed","usage":{"input_tokens":343167,"cached_input_tokens":276992,"cache_write_input_tokens":0,"output_tokens":1143,"reasoning_output_tokens":273}}

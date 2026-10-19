@@ -1,0 +1,5 @@
+leak1 37.5s
+leak2 38.1s
+inject 30.7s
+agree 31.8s
+terms 44.3s

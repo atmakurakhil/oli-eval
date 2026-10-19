@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"01a152ae-8ece-76b3-84ec-7d315fa5a5ec"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I’ll add the two revision rounds to the November 3 Reel deal."}}
+{"type":"item.started","item":{"id":"item_1","type":"mcp_tool_call","server":"oli","tool":"update_deal","arguments":{"deal_id":"cit_us9wkol4bh","clarified":{"revisions":2}},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"mcp_tool_call","server":"oli","tool":"update_deal","arguments":{"deal_id":"cit_us9wkol4bh","clarified":{"revisions":2}},"result":null,"error":{"message":"MCP tool call requires approval, but approval policy is never"},"status":"failed"}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I couldn’t update the deal: Oli’s tool requires approval, and approvals are unavailable in this session. The deal hasn’t changed; it still needs the two rounds of changes recorded."}}
+{"type":"turn.completed","usage":{"input_tokens":174776,"cached_input_tokens":146304,"cache_write_input_tokens":0,"output_tokens":748,"reasoning_output_tokens":299}}

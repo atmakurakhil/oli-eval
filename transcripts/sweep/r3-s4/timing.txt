@@ -1,0 +1,5 @@
+turn1 c10 32.4s sid=01a152ae-4944-7e01-8f78-0f0eb5c4df8a
+turn2 c11 29.4s sid=01a152ae-4944-7e01-8f78-0f0eb5c4df8a
+turn3 c18 38.7s sid=01a152ae-4944-7e01-8f78-0f0eb5c4df8a
+turn4 c13 30.0s sid=01a152ae-4944-7e01-8f78-0f0eb5c4df8a
+turn5 c20 34.1s sid=01a152ae-4944-7e01-8f78-0f0eb5c4df8a

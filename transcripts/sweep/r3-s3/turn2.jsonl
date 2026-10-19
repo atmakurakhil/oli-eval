@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a152ad-2707-7d83-8a20-3cc500ded125"}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"item_0","type":"mcp_tool_call","server":"oli","tool":"confirm_terms_update","arguments":{"change_id":"apc_xc6llva81h"},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_0","type":"mcp_tool_call","server":"oli","tool":"confirm_terms_update","arguments":{"change_id":"apc_xc6llva81h"},"result":null,"error":{"message":"MCP tool call requires approval, but approval policy is never"},"status":"failed"}}
+{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"I couldn’t save it: Oli’s confirmation tool requires an approval step, but this session’s approval policy blocks that step. The notice period is still 14 days."}}
+{"type":"turn.completed","usage":{"input_tokens":154294,"cached_input_tokens":89344,"cache_write_input_tokens":0,"output_tokens":442,"reasoning_output_tokens":108}}
