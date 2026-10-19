@@ -31,3 +31,24 @@ Every deal field has to match something the *brand* said: quoted text, or senten
 - Attribution is a sentence heuristic. "I told them they can have 30 days" would be read as the creator's term. A real version needs the deal fields tagged at the source.
 - One run per case. Model tool choice varies, so each case should run 5+ times and report a pass rate. I didn't, to stay inside a shared usage limit.
 - Only 16 of the 20 cases have a transcript. The other 4 are written but unrun.
+
+## Sweep: all 20 cases, 3 runs each, Codex (19 Oct)
+
+`run_sweep.py` (one level up) groups the cases into 5 short sessions so follow-ups have context, and runs each rep in parallel. `RESULTS_sweep.txt` has every turn and the per-case table.
+
+```
+./score.py --map map_sweep.json --floor 8500 transcripts/sweep/r*-s*/turn*.jsonl
+```
+
+35 pass, 12 blocked, 13 fail. Read by hand, 8 of the 13 are the eval's fault, not the model's:
+- c17 assumes paid ads are allowed; they aren't, and Codex said no update was needed.
+- c20 expects a plan to be moved; Oli has no plan-edit tool, and all three runs said so rather than save a duplicate. That's a tool gap, scored as a fail.
+- c16 and c19 (one run each) answered from terms fetched a turn earlier instead of calling `check_offer` again. Correct answer, strict case.
+- c17 runs 2 and 3: `propose_terms_update` returned a server error. The scorer printed it as "missing" instead of a block. Bug, to fix.
+
+The 5 real ones:
+- Session r2-s2: Oli never loaded, and Codex still answered "Oli would call this workable" with no Oli call. The next turn admitted Oli wasn't connected. The eval needs a guard for a reply that claims Oli's view with no Oli call behind it.
+- c04 failed three different ways (stage left at open; Oli missing; asked for a brand name the case never gives). The case is underspecified.
+- c05 run 3 cascaded from c04.
+
+Side effects on the account: terms unchanged (checked before and after); two placeholder deals and one plan were created. Oli has no delete tool.

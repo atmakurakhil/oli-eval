@@ -1,0 +1,112 @@
+PASS sweep/r1-s1/turn1.jsonl calls=['get_my_terms']
+PASS sweep/r1-s1/turn2.jsonl calls=['get_my_creator_profile']
+PASS sweep/r1-s1/turn3.jsonl calls=['list_paid_briefs']
+PASS sweep/r1-s1/turn4.jsonl calls=['list_my_deals']
+PASS sweep/r1-s2/turn1.jsonl calls=['check_offer']
+FAIL sweep/r1-s2/turn2.jsonl calls=['save_deal']
+      - sequence ['save_deal', 'update_deal'] not met (got ['save_deal'])
+      - invented: save_deal.usage=paid_90, user never said 90
+PASS sweep/r1-s2/turn3.jsonl calls=['save_work_plan', 'list_my_deals', 'update_deal(client_approval)']
+PASS sweep/r1-s3/turn1.jsonl calls=['get_my_terms', 'propose_terms_update']
+BLKD sweep/r1-s3/turn2.jsonl calls=['confirm_terms_update(client_approval)']
+      - BLOCKED confirm_terms_update: client_approval
+BLKD sweep/r1-s4/turn1.jsonl calls=['list_my_deals', 'update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+PASS sweep/r1-s4/turn2.jsonl calls=[]
+BLKD sweep/r1-s4/turn3.jsonl calls=['update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+BLKD sweep/r1-s4/turn4.jsonl calls=['update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+FAIL sweep/r1-s4/turn5.jsonl calls=[]
+      - missing list_my_deals
+PASS sweep/r1-s5/turn1.jsonl calls=['get_my_terms', 'list_my_deals']
+PASS sweep/r1-s5/turn2.jsonl calls=[]
+PASS sweep/r1-s5/turn3.jsonl calls=['list_my_deals', 'check_offer']
+FAIL sweep/r1-s5/turn4.jsonl calls=[]
+      - missing check_offer
+FAIL sweep/r1-s5/turn5.jsonl calls=['get_my_terms']
+      - missing propose_terms_update
+FAIL sweep/r1-s5/turn6.jsonl calls=[]
+      - missing check_offer
+PASS sweep/r2-s1/turn1.jsonl calls=['get_my_terms']
+PASS sweep/r2-s1/turn2.jsonl calls=['get_my_creator_profile']
+PASS sweep/r2-s1/turn3.jsonl calls=['list_paid_briefs']
+PASS sweep/r2-s1/turn4.jsonl calls=['list_my_deals']
+FAIL sweep/r2-s2/turn1.jsonl calls=[]
+      - missing check_offer
+FAIL sweep/r2-s2/turn2.jsonl calls=[]
+      - missing save_deal
+      - sequence ['save_deal', 'update_deal'] not met (got [])
+PASS sweep/r2-s2/turn3.jsonl calls=['list_my_deals', 'save_deal', 'update_deal(client_approval)', 'save_work_plan']
+PASS sweep/r2-s3/turn1.jsonl calls=['get_my_terms', 'propose_terms_update']
+BLKD sweep/r2-s3/turn2.jsonl calls=['confirm_terms_update(client_approval)']
+      - BLOCKED confirm_terms_update: client_approval
+BLKD sweep/r2-s4/turn1.jsonl calls=['list_my_deals', 'update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+PASS sweep/r2-s4/turn2.jsonl calls=[]
+BLKD sweep/r2-s4/turn3.jsonl calls=['update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+BLKD sweep/r2-s4/turn4.jsonl calls=['update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+FAIL sweep/r2-s4/turn5.jsonl calls=[]
+      - missing list_my_deals
+PASS sweep/r2-s5/turn1.jsonl calls=[]
+PASS sweep/r2-s5/turn2.jsonl calls=['get_my_creator_profile', 'get_my_terms']
+PASS sweep/r2-s5/turn3.jsonl calls=['check_offer']
+PASS sweep/r2-s5/turn4.jsonl calls=['check_offer']
+FAIL sweep/r2-s5/turn5.jsonl calls=['propose_terms_update(server_error)']
+      - missing propose_terms_update (server_error)
+PASS sweep/r2-s5/turn6.jsonl calls=['check_offer']
+PASS sweep/r3-s1/turn1.jsonl calls=['get_my_terms']
+PASS sweep/r3-s1/turn2.jsonl calls=['get_my_creator_profile']
+PASS sweep/r3-s1/turn3.jsonl calls=['list_paid_briefs']
+PASS sweep/r3-s1/turn4.jsonl calls=['list_my_deals']
+PASS sweep/r3-s2/turn1.jsonl calls=['get_my_terms', 'check_offer']
+FAIL sweep/r3-s2/turn2.jsonl calls=['list_my_deals']
+      - missing save_deal
+      - sequence ['save_deal', 'update_deal'] not met (got ['list_my_deals'])
+FAIL sweep/r3-s2/turn3.jsonl calls=[]
+      - missing save_work_plan
+PASS sweep/r3-s3/turn1.jsonl calls=['get_my_terms', 'propose_terms_update']
+BLKD sweep/r3-s3/turn2.jsonl calls=['confirm_terms_update(client_approval)']
+      - BLOCKED confirm_terms_update: client_approval
+BLKD sweep/r3-s4/turn1.jsonl calls=['list_my_deals', 'update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+PASS sweep/r3-s4/turn2.jsonl calls=[]
+BLKD sweep/r3-s4/turn3.jsonl calls=['update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+BLKD sweep/r3-s4/turn4.jsonl calls=['update_deal(client_approval)']
+      - BLOCKED update_deal: client_approval
+FAIL sweep/r3-s4/turn5.jsonl calls=[]
+      - missing list_my_deals
+PASS sweep/r3-s5/turn1.jsonl calls=['get_my_terms', 'list_my_deals']
+PASS sweep/r3-s5/turn2.jsonl calls=[]
+PASS sweep/r3-s5/turn3.jsonl calls=['check_offer']
+PASS sweep/r3-s5/turn4.jsonl calls=['check_offer']
+FAIL sweep/r3-s5/turn5.jsonl calls=['propose_terms_update(server_error)']
+      - missing propose_terms_update (server_error)
+PASS sweep/r3-s5/turn6.jsonl calls=['check_offer']
+
+per case over repeated runs (pass / blocked / fail):
+  c01  3/0/0 of 3
+  c02  3/0/0 of 3
+  c03  2/0/1 of 3
+  c04  0/0/3 of 3
+  c05  2/0/1 of 3
+  c06  3/0/0 of 3
+  c07  0/3/0 of 3
+  c08  3/0/0 of 3
+  c09  3/0/0 of 3
+  c10  0/3/0 of 3
+  c11  3/0/0 of 3
+  c12  3/0/0 of 3
+  c13  0/3/0 of 3
+  c14  3/0/0 of 3
+  c15  3/0/0 of 3
+  c16  2/0/1 of 3
+  c17  0/0/3 of 3
+  c18  0/3/0 of 3
+  c19  2/0/1 of 3
+  c20  0/0/3 of 3
+
+35/60 passed · 12 blocked by setup or client policy · 13 model failures · 1 guard hits

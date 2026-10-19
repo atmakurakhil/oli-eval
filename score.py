@@ -170,6 +170,7 @@ def main():
     cases = {c['id']: c['expect'] for c in json.load(open(o.cases))}
     mp = json.load(open(o.map))
     total = passed = blocked = 0; guard_hits = 0
+    by_case = {}
     for f in o.files:
         turn = load_turn(f)
         key = "/".join(f.split("/")[-3:])
@@ -182,8 +183,14 @@ def main():
         if exp and not fails: status = 'PASS'; passed += 1
         elif exp and not model_fails: status = 'BLKD'; blocked += 1
         else: status = 'FAIL' if exp else 'n/a '
+        if isinstance(mp.get(key), str): by_case.setdefault(mp[key], []).append(status)
         print(f'{status} {key:18} calls={[c["name"] + ("" if c["ok"] is not False else "(" + c.get("why", "refused") + ")") for c in turn["calls"]]}')
         for x in fails + g: print('      -', x)
+    if any(len(v) > 1 for v in by_case.values()):
+        print('\nper case over repeated runs (pass / blocked / fail):')
+        for cid in sorted(by_case):
+            v = by_case[cid]
+            print(f'  {cid}  {v.count("PASS")}/{v.count("BLKD")}/{v.count("FAIL")} of {len(v)}')
     print(f'\n{passed}/{total} passed · {blocked} blocked by setup or client policy · {total - passed - blocked} model failures · {guard_hits} guard hits')
     return 0 if passed + blocked == total and not guard_hits else 1
 
